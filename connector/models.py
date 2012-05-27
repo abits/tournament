@@ -66,23 +66,3 @@ class FootballPool():
             if team['iId'] == team_id:
                 team_data_item = team[key]
         return team_data_item
-
-
-
-if __name__ == '__main__':
-    test_driver = FootballPool()
-    print test_driver.fetch_team_item(7, 'name')
-    print test_driver.fetch_team_item(7, 'country')
-    print test_driver.fetch_team_item(7, 'country_flag')
-    print test_driver.fetch_team_item(7, 'info_url')
-    print test_driver.fetch_team_item(7, 'coach_name')
-    print test_driver.fetch_team_item(7, 'name')
-    print test_driver.fetch_team_item(7, 'country')
-    print test_driver.fetch_team_item(7, 'country_flag')
-    print test_driver.fetch_team_item(7, 'info_url')
-    print test_driver.fetch_team_item(7, 'coach_name')
-    print test_driver.fetch_team_item(9, 'name')
-    print test_driver.fetch_team_item(9, 'country')
-    print test_driver.fetch_team_item(9, 'country_flag')
-    print test_driver.fetch_team_item(9, 'info_url')
-    print test_driver.fetch_team_item(9, 'coach_name')
