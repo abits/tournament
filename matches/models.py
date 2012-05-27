@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 
 
 class Team(models.Model):
-    id = models.IntegerField()
+    id = models.IntegerField(primary_key=True)
     name = models.CharField(max_length=128, blank=True)
     country = models.CharField(max_length=128, blank=True)
     country_flag = models.URLField(blank=True)
