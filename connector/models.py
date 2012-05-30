@@ -72,7 +72,7 @@ class ConnectorTeam(Connector):
 
 class ConnectorMatch(Connector):
     match_data_raw = { 'id' : '', 'data' : '' }
-    all_matches_raw = {}
+    all_matches_raw = None
 
     def fetch_match_data(self, match_id, match_data_item):
         match_data = []
@@ -81,7 +81,7 @@ class ConnectorMatch(Connector):
         elif match_data_item == 'date':
             play_date = self.fetch_match_data_item(match_id, 'dPlayDate')
             play_time = self.fetch_match_data_item(match_id, 'tPlayTime')
-            play_datetime = datetime.strptime(' '.join([play_date, play_time]), '%Y-%m-%d %H:%M:%s')
+            play_datetime = datetime.strptime(' '.join([play_date, play_time]), '%Y-%m-%d %H:%M:%S')
             match_data.append(play_datetime)
         elif match_data_item == 'team_1':
             team = self.fetch_match_data_item(match_id, 'Team1')
@@ -122,8 +122,29 @@ class ConnectorMatch(Connector):
         return self.match_data_raw['data']
 
     def fetch_match_data_item(self, match_id, key):
-        match_data = self.fetch_game_data(match_id)
-        return match_data[key]
+        if not self.all_matches_raw:
+            match_data = self.fetch_game_data(match_id)
+            return match_data[key]
+        else:
+            for match in self.all_matches_raw:
+                if match['iId'] == match_id:
+                    self.match_data_raw = { 'id' : match_id,
+                                          'data' : match }
+                    break
+            match_data = self.fetch_game_data(match_id)
+            return match_data[key]
+
+    def clear_all_match_raw(self):
+        self.all_matches_raw = None
 
     def fetch_all_match_data(self):
-        pass
+        if not self.all_matches_raw:
+            self.clear_all_match_raw()
+            req = 'http://footballpool.dataaccess.eu/data/info.wso/AllGames/JSON'
+            self.all_matches_raw = self.retrieve_data(req)
+        return self.all_matches_raw
+
+if __name__ == '__main__':
+    cm = ConnectorMatch()
+    cm.fetch_all_match_data()
+    print cm.fetch_match_data_item(7, 'description')
