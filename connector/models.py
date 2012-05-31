@@ -141,7 +141,7 @@ class ConnectorMatch(Connector):
         if not self.all_matches_raw:
             self.clear_all_match_raw()
             req = 'http://footballpool.dataaccess.eu/data/info.wso/AllGames/JSON'
-            self.all_matches_raw = self.retrieve_data(req)
+            self.all_matches_raw = self.parse_data(self.retrieve_data(req))
         return self.all_matches_raw
 
 if __name__ == '__main__':
