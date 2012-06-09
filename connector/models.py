@@ -4,6 +4,7 @@ import json
 import urllib, urllib2
 from datetime import datetime
 
+
 class Connector(object):
     def retrieve_data(self, request):
         data = urllib2.urlopen(request)
@@ -73,38 +74,36 @@ class ConnectorTeam(Connector):
 class ConnectorMatch(Connector):
     match_data_raw = { 'id' : '', 'data' : '' }
     all_matches_raw = None
+    all_group_competitors_raw = None
 
     def fetch_match_data(self, match_id, match_data_item):
         match_data = []
         if match_data_item == 'description' or match_data_item == 'name':
-            match_data.append(self.fetch_match_data_item(match_id, 'sDescription'))
+            match_data = self.fetch_match_data_item(match_id, 'sDescription')
         elif match_data_item == 'date':
             play_date = self.fetch_match_data_item(match_id, 'dPlayDate')
             play_time = self.fetch_match_data_item(match_id, 'tPlayTime')
-            play_datetime = datetime.strptime(' '.join([play_date, play_time]), '%Y-%m-%d %H:%M:%S')
-            match_data.append(play_datetime)
+            match_data = datetime.strptime(' '.join([play_date, play_time]), '%Y-%m-%d %H:%M:%S')
         elif match_data_item == 'team_1':
             team = self.fetch_match_data_item(match_id, 'Team1')
-            match_data.append(team['iId'])
+            match_data = team['iId']
         elif match_data_item == 'team_2':
             team = self.fetch_match_data_item(match_id, 'Team2')
-            match_data.append(team['iId'])
+            match_data = team['iId']
         elif match_data_item == 'score':
-            match_data.append(self.fetch_match_data_item(match_id, 'sScore'))
+            match_data = self.fetch_match_data_item(match_id, 'sScore')
         elif match_data_item == 'result':
-            match_data.append(self.fetch_match_data_item(match_id, 'sResult'))
+            match_data = self.fetch_match_data_item(match_id, 'sResult')
         elif match_data_item == 'yellow_cards':
-            match_data.append(self.fetch_match_data_item(match_id, 'iYellowCards'))
+            match_data = self.fetch_match_data_item(match_id, 'iYellowCards')
         elif match_data_item == 'red_cards':
-            match_data.append(self.fetch_match_data_item(match_id, 'iRedCards'))
+            match_data = self.fetch_match_data_item(match_id, 'iRedCards')
         elif match_data_item == 'goals':
-            match_data = self.fetch_match_data_item(match_id, 'Goals')
+            match_data = json.dumps(self.fetch_match_data_item(match_id, 'Goals'))
         elif match_data_item == 'cards':
-            match_data = self.fetch_match_data_item(match_id, 'Cards')
+            match_data = json.dumps(self.fetch_match_data_item(match_id, 'Cards'))
         elif match_data_item == 'group':
-            description = self.fetch_match_data(match_id, 'description')
-            if 'Round' in description[0]:
-                pass
+            match_data = self.get_group(match_id)
         return match_data
 
     def clear_match_data_raw(self):
@@ -144,7 +143,19 @@ class ConnectorMatch(Connector):
             self.all_matches_raw = self.parse_data(self.retrieve_data(req))
         return self.all_matches_raw
 
-if __name__ == '__main__':
-    cm = ConnectorMatch()
-    cm.fetch_all_match_data()
-    print cm.fetch_match_data_item(7, 'description')
+    def fetch_all_group_competitors(self):
+        if not self.all_group_competitors_raw:
+            self.clear_all_group_competitors_raw()
+            req = 'http://footballpool.dataaccess.eu/data/info.wso/AllGroupCompetitors/JSON/'
+            self.all_group_competitors_raw = self.parse_data(self.retrieve_data(req))
+        return self.all_group_competitors_raw
+
+    def get_group(self, match_id):
+        for group in self.fetch_all_group_competitors():
+            for team in group['TeamsInGroup']:
+                if team['iId'] == self.fetch_match_data(match_id, 'team_1'):
+                    return group['GroupInfo']['sCode']
+        return ''
+
+    def clear_all_group_competitors_raw(self):
+        self.all_group_competitors_raw = None

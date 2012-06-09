@@ -1,0 +1,11 @@
+{% if match_list %}
+    <ul>
+        {% for match in match_list %}
+            <p style="color: #6495ed;">{{ match.team_1.name }} : {{ match.team_2.name }}
+                {{ match.date }} {{ match.score }}
+            </p>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>No matches are available.</p>
+{% endif %}

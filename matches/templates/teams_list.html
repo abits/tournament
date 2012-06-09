@@ -1,0 +1,10 @@
+{% if teams_list %}
+    <ul>
+    {% for team in teams_list %}
+        <pre style="color: #6495ed;">{{ team.name }} ({{ team.coach_name }})</pre>
+        <img height="70px" src="{{ team.country_flag }}" alt="flag of {{ team.country }}" />
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>No teams are available.</p>
+{% endif %}
