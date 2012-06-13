@@ -1,11 +1,16 @@
 {% if match_list %}
-    <ul>
+    <table>
         {% for match in match_list %}
-            <p style="color: #6495ed;">{{ match.team_1.name }} : {{ match.team_2.name }}
-                {{ match.date }} {{ match.score }}
-            </p>
+            <tr>
+                <td>{{ match.team_1.name }}</td>
+                <td>{{ match.team_2.name }}</td>
+                <td>{{ match.date }}</td>
+                <td>{{ match.score }}</td>
+                <td>{{ match.name }}</td>
+                <td>{{ match.group }}</td>
+            </tr>
         {% endfor %}
-    </ul>
+    </table>
 {% else %}
     <p>No matches are available.</p>
 {% endif %}

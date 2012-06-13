@@ -8,6 +8,7 @@ urlpatterns = patterns('',
     # Examples:
     # url(r'^$', 'matches.views.home', name='home'),
     # url(r'^matches/', include('matches.foo.urls')),
+    url(r'^bets/(?P<username>[a-z0-9]+)', 'bets.views.edit'),
     url(r'^matches/$', 'matches.views.index'),
     url(r'^matches/init/(?P<scope>all|matches|teams)', 'matches.views.init'),
     url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
