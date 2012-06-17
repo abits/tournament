@@ -90,8 +90,14 @@ class ConnectorMatch(Connector):
         elif match_data_item == 'team_2':
             team = self.fetch_match_data_item(match_id, 'Team2')
             match_data = team['iId']
-        elif match_data_item == 'score':
-            match_data = self.fetch_match_data_item(match_id, 'sScore')
+        elif match_data_item == 'score_1':
+            raw = self.fetch_match_data_item(match_id, 'sScore')
+            scores = raw.split('-')
+            match_data = scores[0]
+        elif match_data_item == 'score_2':
+            raw = self.fetch_match_data_item(match_id, 'sScore')
+            scores = raw.split('-')
+            match_data = scores[1]
         elif match_data_item == 'result':
             match_data = self.fetch_match_data_item(match_id, 'sResult')
         elif match_data_item == 'yellow_cards':

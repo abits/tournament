@@ -107,7 +107,8 @@ TEMPLATE_DIRS = (
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
     "/home/chm/Projekte/Web/tournament/matches/templates",
-    "/home/chm/Projekte/Web/tournament/bets/templates"
+    "/home/chm/Projekte/Web/tournament/bets/templates",
+    "/home/chm/Projekte/Web/tournament/templates"
 )
 
 INSTALLED_APPS = (
@@ -122,8 +123,9 @@ INSTALLED_APPS = (
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
     'matches',
-    'connector'
-)
+    'connector',
+    'registration',
+    )
 
 # A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to
@@ -147,3 +149,5 @@ LOGGING = {
         },
     }
 }
+
+ACCOUNT_ACTIVATION_DAYS = 7 # One-week activation window; you may, of course, use a different value.

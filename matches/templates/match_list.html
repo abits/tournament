@@ -1,14 +1,14 @@
 {% if match_list %}
     <table>
         {% for match in match_list %}
-            <tr>
-                <td>{{ match.team_1.name }}</td>
-                <td>{{ match.team_2.name }}</td>
-                <td>{{ match.date }}</td>
-                <td>{{ match.score }}</td>
-                <td>{{ match.name }}</td>
-                <td>{{ match.group }}</td>
-            </tr>
+            {% if match.team_1.name %}
+                <tr>
+                    <td>{{ match.team_1.name }}</td>
+                    <td>{{ match.team_2.name }}</td>
+                    <td>{{ match.date }}</td>
+                    <td>{{ match.score_1 }} : {{ match.score_2 }}</td>
+                </tr>
+            {% endif %}
         {% endfor %}
     </table>
 {% else %}

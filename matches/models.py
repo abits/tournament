@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.db.models.query import QuerySet
 from connector.models import ConnectorMatch, ConnectorTeam
 from datetime import datetime, timedelta
 import json
@@ -16,7 +17,11 @@ class Team(models.Model):
     matches_lost = models.IntegerField(max_length=2, null=True)
     matches_played = models.IntegerField(max_length=2, null=True)
 
+    def __unicode__(self):
+        return self.country
+
 class Match(models.Model):
+    id = models.IntegerField(primary_key=True)
     name = models.CharField(max_length=128, blank=True)
     description = models.CharField(max_length=1024, blank=True)
     date = models.DateTimeField(blank=False)
@@ -34,30 +39,24 @@ class Match(models.Model):
     level = models.IntegerField(max_length=2, blank=True, null=True)
     group = models.CharField(max_length=1, blank=True)
 
-    def get_score(self, team=None):
-        score = ''
-        if self.result != 'U':
-            score = self.score.replace('-', ' : ')
-        if (team is not None) and score:
-            scores = score.split('-')
-            index = team - 1
-            return scores[index]
-        else:
-            return score
-
-    def get_score_1(self):
-        return self.get_score(1)
-
-    def get_score_2(self):
-        return self.get_score(2)
-
     def is_locked(self):
         return bool(self.date < (datetime.now() - timedelta(minutes=15)))
+
+    def __unicode__(self):
+        name1 = 'TBA'
+        name2 = 'TBA'
+        if self.team_1 is not None:
+            name1 = self.team_1.name
+        if self.team_2 is not None:
+            name2 = self.team_2.name
+
+        return '%s - %s (%s)' % (name1, name2, self.name)
 
 
 class Bet(models.Model):
     stake = models.CharField(max_length=128, blank=True)
-    result = models.CharField(max_length=8, blank=True)
+    score_1 = models.IntegerField(max_length=2, blank=True, null=True)
+    score_2 = models.IntegerField(max_length=2, blank=True, null=True)
     user = models.ForeignKey(User)
     match = models.ForeignKey(Match)
     date_placed = models.DateTimeField(blank=True)
@@ -125,7 +124,8 @@ class Tournament(object):
             match.cards = json.dumps(cm.fetch_match_data(match.id, 'cards'))
             match.description = cm.fetch_match_data(match.id, 'description')
             match.group = cm.fetch_match_data(match.id, 'group')
-            match.score = cm.fetch_match_data(match.id, 'score')
+            match.score_1 = cm.fetch_match_data(match.id, 'score_1')
+            match.score_2 = cm.fetch_match_data(match.id, 'score_2')
             match.goals = json.dumps(cm.fetch_match_data(match.id, 'goals'))
             match.result = cm.fetch_match_data(match.id, 'result')
             match.red_cards = json.dumps(cm.fetch_match_data(match.id, 'red_cards'))

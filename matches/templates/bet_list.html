@@ -1,0 +1,16 @@
+<form method="post" action="">
+    {% csrf_token %}
+    <table border="1">
+        {{ formset.management_form }}
+        {%  for form in formset %}
+            <tr>
+                <td>{{ form.score_1 }}</td>
+                <td>{{ form.score_2 }}</td>
+            </tr>
+            {%  for hidden in form.hidden_fields %}
+                {{ hidden }}
+            {% endfor %}
+        {% endfor %}
+    </table>
+    <input type="submit" value="Submit" />
+</form>

@@ -33,7 +33,8 @@ class FootballPoolTestCase(unittest.TestCase):
         """Connector can fetch match info"""
         self.assertEqual(self.cm.fetch_match_data(17, 'description'), [u'Round 3'])
         self.assertEqual(self.cm.fetch_match_data(17, 'result'), [u'U'])
-        self.assertEqual(self.cm.fetch_match_data(17, 'score'), [u'0-0'])
+        self.assertEqual(self.cm.fetch_match_data(17, 'score_1'), [1])
+        self.assertEqual(self.cm.fetch_match_data(17, 'score_2'), [0])
         self.assertEqual(self.cm.fetch_match_data(17, 'yellow_cards'), [0])
         self.assertEqual(self.cm.fetch_match_data(17, 'red_cards'), [0])
         self.assertEqual(self.cm.fetch_match_data(17, 'team_1'), [4])
@@ -42,7 +43,8 @@ class FootballPoolTestCase(unittest.TestCase):
 
         self.assertEqual(self.cm.fetch_match_data(3, 'description'), [u'Round 1'])
         self.assertEqual(self.cm.fetch_match_data(3, 'result'), [u'U'])
-        self.assertEqual(self.cm.fetch_match_data(3, 'score'), [u'0-0'])
+        self.assertEqual(self.cm.fetch_match_data(17, 'score_1'), [1])
+        self.assertEqual(self.cm.fetch_match_data(17, 'score_2'), [0])
         self.assertEqual(self.cm.fetch_match_data(3, 'yellow_cards'), [0])
         self.assertEqual(self.cm.fetch_match_data(3, 'red_cards'), [0])
         self.assertEqual(self.cm.fetch_match_data(3, 'team_1'), [5])
@@ -51,7 +53,8 @@ class FootballPoolTestCase(unittest.TestCase):
 
         self.assertEqual(self.cm.fetch_match_data(3, 'description'), [u'Round 1'])
         self.assertEqual(self.cm.fetch_match_data(3, 'result'), [u'U'])
-        self.assertEqual(self.cm.fetch_match_data(3, 'score'), [u'0-0'])
+        self.assertEqual(self.cm.fetch_match_data(17, 'score_1'), [1])
+        self.assertEqual(self.cm.fetch_match_data(17, 'score_2'), [0])
         self.assertEqual(self.cm.fetch_match_data(3, 'yellow_cards'), [0])
         self.assertEqual(self.cm.fetch_match_data(3, 'red_cards'), [0])
         self.assertEqual(self.cm.fetch_match_data(3, 'team_1'), [5])
