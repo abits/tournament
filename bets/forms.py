@@ -32,7 +32,7 @@ class BetForm(forms.ModelForm):
 
 #        stake = models.CharField(max_length=128, blank=True)
 #    result = models.CharField(max_length=8, blank=True)
-#    user = models.ForeignKey(User)
+#    users = models.ForeignKey(User)
 #    match = models.ForeignKey(Match)
 #    date_placed = models.DateTimeField(blank=True)
 #    active = models.BooleanField(default=True)
