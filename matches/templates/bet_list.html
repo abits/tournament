@@ -1,10 +1,25 @@
 <form method="post" action="">
     {% csrf_token %}
-    {{ formset.as_p   }}
+    {{ formset.management_form }}
     <table border="1">
-        {{ formset.management_form }}
-        {%  for form in formset %}
+        {% for lock in locked %}
+        <tr>
+            <td>{{ lock.match.team_1 }}</td>
+            <td>{{ lock.match.team_2 }}</td>
+            <td><div class="match-desc">{{ lock.match.description }}</div><div class="match-date">{{ lock.match.date }}</div></td>
+            <td>{{ lock.match.score_1 }}</td>
+            <td>{{ lock.match.score_2 }}</td>
+            <td>{{ lock.bet }}</td>
+            <td>{{ lock.bet.score_2 }}</td>
+        </tr>
+        {% endfor %}
+        {%  for data, form in formset %}
             <tr>
+                <td>{{ data.team_1 }}</td>
+                <td>{{ data.team_2 }}</td>
+                <td><div class="match-desc">{{ data.description }}</div><div class="match-date">{{ data.date }}</div></td>
+                <td>&nbsp;-&nbsp;</td>
+                <td>&nbsp;-&nbsp;</td>
                 <td>{{ form.score_1 }}</td>
                 <td>{{ form.score_2 }}</td>
             </tr>

@@ -31,27 +31,32 @@ def index(request):
 def bet(request):
     if not request.user.is_authenticated:
         return HttpResponseRedirect('/accounts/login/?next=%s' % request.path)
-    print request.user.pk
 
     context = RequestContext(request=request)
     BetFormSet = formset_factory(BetForm, extra=0)
+    initial_data = []
+    info_data = []
+    locked = []
     if request.method == 'POST':
         formset = BetFormSet(request.POST)
         if formset.is_valid():
             print formset.cleaned_data
             # Process the data in form.cleaned_data
-
             return HttpResponseRedirect('/matches')
     else:
-        initial_data = []
-        for match in Match.objects.filter(date__gt=datetime.now() - timedelta(minutes=15)):
+        for match in Match.objects.filter(date__gt=datetime.now() - timedelta(minutes=15)).order_by('date'):
             data = { 'match': match.pk, 'user': request.user.pk }
+            info_data.append(match)
             initial_data.append(data)
-        print initial_data
-
         formset = BetFormSet(initial=initial_data)
+        for match in Match.objects.filter(date__lte=datetime.now() - timedelta(minutes=15)).order_by('date'):
+            ###print Bet.objects.get(match=match.id, user=request.user.pk)
+            data = { 'match': match, 'bet': Bet.objects.filter(match=match).filter(user=request.user)}
+            print data
+            locked.append(data)
+        context['locked'] = locked
+        context['formset'] = zip(info_data, formset)
 
-    context['formset'] = formset
     return render_to_response('bet_list.html', context)
 
 
